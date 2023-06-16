@@ -21,6 +21,8 @@ hotelRoute.get("/",async(req,res)=>{
 //   "distance":"300",
 //   "cheapestPrice":1000
 
+
+
 // for posting the new hotel
 hotelRoute.post("/add",async(req,res)=>{
     const newHotel = new HotelModel(req.body);
@@ -41,6 +43,17 @@ hotelRoute.patch("/update/:id",async(req,res)=>{
     } catch (error) {
         console.log(error);
         res.status(400).send({"msg":"Error in updating"});
+    }
+})
+
+// for deleting the data
+hotelRoute.delete("/delete/:id",async(req,res)=>{
+    try {
+        const deleteHotel = await HotelModel.findByIdAndDelete({_id:req.params.id});
+        res.status(200).send(deleteHotel);
+    } catch (error) {
+        console.log(error);
+        res.status(400).send("error in deleting the data");
     }
 })
 
