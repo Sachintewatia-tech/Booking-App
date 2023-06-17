@@ -1,14 +1,17 @@
 const express = require("express");
 const { HotelModel } = require("../models/hotelModel");
+const { createError } = require("../utils/ErrorFile");
 const hotelRoute = express.Router();
 
 // for getting
-hotelRoute.get("/",async(req,res)=>{
+hotelRoute.get("/",async(req,res,next)=>{
+    // const fail = true;
+    // if(fail) return next(createError(404,"You are not Authenticated!"));
     try {
         const hotels =  await HotelModel.find();
         res.status(200).send(hotels);
-    } catch (error) {
-        console.log(error);
+    } catch (err) {
+        // next(err);
         res.status(400).send("error in getting hotels");
     }
 })
@@ -54,6 +57,17 @@ hotelRoute.delete("/delete/:id",async(req,res)=>{
     } catch (error) {
         console.log(error);
         res.status(400).send("error in deleting the data");
+    }
+});
+
+// for single hotel
+hotelRoute.get("/:id",async(req,res)=>{
+    try {
+        const oneHotel = await HotelModel.findById(req.params.id);
+        res.send(oneHotel);
+    } catch (error) {
+        console.log(error);
+        res.status(400).send("error in finding single hotel");
     }
 })
 
