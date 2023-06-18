@@ -24,7 +24,7 @@ const AuthSchema = mongoose.Schema({
     versionKey:false
 });
 
-const AuthModel = mongoose.model("Hotels",AuthSchema);
+const AuthModel = mongoose.model("user",AuthSchema);
 
 module.exports = {
     AuthModel
