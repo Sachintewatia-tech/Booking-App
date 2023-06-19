@@ -4,9 +4,11 @@ const { authRoute } = require("./Routes/AuthRoute");
 const { userRoute } = require("./Routes/UsersRoute");
 const { hotelRoute } = require("./Routes/HotelsRoute");
 const { roomRoute } = require("./Routes/RoomRoutes");
+const cookie_parser = require("cookie-parser");
 const app = express();
 require('dotenv').config();
 app.use(express.json());
+app.use(cookie_parser());
 
 app.get("/",(req,res)=>{
     res.send("Welcome to the app");
