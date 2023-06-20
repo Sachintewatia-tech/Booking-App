@@ -1,12 +1,15 @@
 const express = require("express");
 const { UserModel } = require("../models/hotelModel");
 const { createError } = require("../utils/ErrorFile");
+const { verifyToekn } = require("../utils/verifyToken");
 const userRoute = express.Router();
+
+userRoute.get("/checkauth",verifyToekn,(req,res,next)=>{
+    res.send("you are logged in!")
+})
 
 // for getting
 userRoute.get("/",async(req,res,next)=>{
-    // const fail = true;
-    // if(fail) return next(createError(404,"You are not Authenticated!"));
     try {
         const users =  await UserModel.find();
         res.status(200).send(users);
@@ -15,15 +18,6 @@ userRoute.get("/",async(req,res,next)=>{
         res.status(400).send("error in getting hotels");
     }
 })
-
-// "type":"DOSA specialist",
-//   "title":"Very good hotel in city",
-//   "desc":"kjhovidjiown",
-//   "city":"Palwal",
-//   "address":"Palwal",
-//   "distance":"300",
-//   "cheapestPrice":1000
-
 
 
 // for posting the new hotel
