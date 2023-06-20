@@ -1,6 +1,7 @@
 const express = require("express");
 const { HotelModel } = require("../models/hotelModel");
 const { createError } = require("../utils/ErrorFile");
+const { verifyUser } = require("../utils/verifyToken");
 const hotelRoute = express.Router();
 
 // for getting
@@ -27,7 +28,7 @@ hotelRoute.get("/",async(req,res,next)=>{
 
 
 // for posting the new hotel
-hotelRoute.post("/add",async(req,res)=>{
+hotelRoute.post("/add",verifyUser,async(req,res)=>{
     const newHotel = new HotelModel(req.body);
     try {
         const savedHotel = await newHotel.save();
@@ -39,7 +40,7 @@ hotelRoute.post("/add",async(req,res)=>{
 });
 
 // for updating 
-hotelRoute.patch("/update/:id",async(req,res)=>{
+hotelRoute.patch("/update/:id",verifyUser,async(req,res)=>{
     try {
         const update = await HotelModel.findByIdAndUpdate({_id:req.params.id},req.body);
         res.status(200).send({"successful":update})
@@ -50,7 +51,7 @@ hotelRoute.patch("/update/:id",async(req,res)=>{
 })
 
 // for deleting the data
-hotelRoute.delete("/delete/:id",async(req,res)=>{
+hotelRoute.delete("/delete/:id",verifyUser, async(req,res)=>{
     try {
         const deleteHotel = await HotelModel.findByIdAndDelete({_id:req.params.id});
         res.status(200).send(deleteHotel);
