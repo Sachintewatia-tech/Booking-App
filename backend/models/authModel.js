@@ -20,7 +20,8 @@ const AuthSchema = mongoose.Schema({
         type:Boolean,
         default:false
     },
-},{
+},{timestamps:true},
+{
     versionKey:false
 });
 
