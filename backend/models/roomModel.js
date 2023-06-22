@@ -17,7 +17,7 @@ const roomSchema = mongoose.Schema({
         type:String,
         required:true,
     },
-    roomNumbers:[{number:Number,unavailabelRoom:{type:[Date]}}]
+    roomNumber:[{number:Number,unavailabelRoom:{type:[Date]}}]
 },{timestamps:true},
 {
     versionKey:false
