@@ -4,8 +4,8 @@ const { HotelModel } = require("../models/hotelModel");
 const { verifyUser, verifyAdmin } = require("../utils/verifyToken");
 const roomRoute = express.Router();
 
-roomRoute.post("/:hotelID",async(req,res,next)=>{
-    const hotelId = req.params.id;
+roomRoute.post("/:hotelid",async(req,res,next)=>{
+    const hotelId = req.params.hotelid;
     const newRoom = new RoomModel(req.body);
     try {
         const saveRoom = await newRoom.save();
@@ -48,8 +48,8 @@ roomRoute.patch("/update/:id",verifyAdmin,async(req,res)=>{
 })
 
 // for deleting the room
-roomRoute.delete("/id/:hotlid",verifyAdmin, async(req,res)=>{
-    const hotelId = req.params.id; 
+roomRoute.delete("/:id/:hotlid",verifyAdmin, async(req,res)=>{
+    const hotelId = req.params.hotlid; 
     try {
         const deleteRoom = await RoomModel.findByIdAndDelete({_id:req.params.id});
         try {
