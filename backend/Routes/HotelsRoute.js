@@ -6,13 +6,39 @@ const hotelRoute = express.Router();
 
 // for getting
 hotelRoute.get("/",async(req,res,next)=>{
-    // const fail = true;
-    // if(fail) return next(createError(404,"You are not Authenticated!"));
     try {
         const hotels =  await HotelModel.find();
         res.status(200).send(hotels);
     } catch (err) {
-        // next(err);
+        next(err);
+        res.status(400).send("error in getting hotels");
+    }
+})
+
+
+// count by city
+hotelRoute.get("/countbycity",async(req,res,next)=>{
+    const city = req.query.cities.split(",");
+    try {
+        const list = await Promise.all(city.map((city)=>{
+            return HotelModel.countDocuments({city:city});
+        }))
+        
+        res.status(200).send(list);
+    } catch (err) {
+        next(err);
+        res.status(400).send("error in getting hotels");
+    }
+})
+
+
+// count by type
+hotelRoute.get("/countbytype",async(req,res,next)=>{
+    try {
+        const hotels =  await HotelModel.find();
+        res.status(200).send(hotels);
+    } catch (err) {
+        next(err);
         res.status(400).send("error in getting hotels");
     }
 })
@@ -62,7 +88,7 @@ hotelRoute.delete("/delete/:id",verifyAdmin, async(req,res)=>{
 });
 
 // for single hotel
-hotelRoute.get("/:id",async(req,res)=>{
+hotelRoute.get("/find/:id",async(req,res)=>{
     try {
         const oneHotel = await HotelModel.findById(req.params.id);
         res.send(oneHotel);
