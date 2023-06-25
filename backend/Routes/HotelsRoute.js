@@ -31,6 +31,26 @@ hotelRoute.get("/countbycity",async(req,res,next)=>{
     }
 })
 
+// count by type
+hotelRoute.get("/countbytype",async(req,res,next)=>{
+    try {
+        const hotelCount = await HotelModel.countDocuments({type:"hotel"});        
+        const apartmentCount = await HotelModel.countDocuments({type:"apartment"});        
+        const resortCount = await HotelModel.countDocuments({type:"resort"});        
+        const villaCount = await HotelModel.countDocuments({type:"villa"});        
+        const cabinCount = await HotelModel.countDocuments({type:"cabin"});        
+        res.status(200).send([
+            {type:"hotel",count:hotelCount},
+            {type:"apartment",count:apartmentCount},
+            {type:"resort",count:resortCount},
+            {type:"villa",count:villaCount},
+            {type:"cabin",count:cabinCount}
+        ]);
+    } catch (err) {
+        next(err);
+        res.status(400).send("error in getting hotels");
+    }
+})
 
 // count by type
 hotelRoute.get("/countbytype",async(req,res,next)=>{

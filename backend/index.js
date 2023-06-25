@@ -1,4 +1,5 @@
 const express = require("express");
+const cors = require("cors");
 const { connection } = require("./db");
 const { authRoute } = require("./Routes/AuthRoute");
 const { userRoute } = require("./Routes/UsersRoute");
@@ -9,6 +10,7 @@ const app = express();
 require('dotenv').config();
 app.use(express.json());
 app.use(cookie_parser());
+app.use(cors());
 
 app.get("/",(req,res)=>{
     res.send("Welcome to the app");
