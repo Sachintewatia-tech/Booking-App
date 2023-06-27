@@ -15,20 +15,23 @@ const PropertyList = () => {
     <div className="pList">
       {
         data && imgs.map((ele,i)=>{
-          console.log(data[0].count);
-          console.log(i);
-        <div className="pListItem">
+          // console.log(data[0].count);
+          // console.log(i);
+          return(
+
+            <div className="pListItem">
           <img
             src={ele}
             alt=""
             className="pListImg"
-          />
+            />
         <div className="pListTitles">
-          {/* <h1>{data[i].type}</h1>
-          <h2>{data[i].count}{data[i].type}</h2> */}
+          <h1>{data[i]?.type}</h1>
+          <h2>{data[i]?.count}{data[i]?.type}</h2>
         </div>
       </div>
-      })
+            )
+          })
       }
     </div>
   );
