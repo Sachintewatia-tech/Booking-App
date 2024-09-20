@@ -2,20 +2,87 @@ const express = require("express");
 const { HotelModel } = require("../models/hotelModel");
 const { createError } = require("../utils/ErrorFile");
 const { verifyUser, verifyAdmin } = require("../utils/verifyToken");
+const { RoomModel } = require("../models/roomModel");
 const hotelRoute = express.Router();
 
-// for getting
-hotelRoute.get("/",async(req,res,next)=>{
-    // const fail = true;
-    // if(fail) return next(createError(404,"You are not Authenticated!"));
+hotelRoute.get("/", async (req, res, next) => {
+    try {
+        const { limit, max, min, ...others } = req.query;
+        const filter = { ...others };
+        if (min !== undefined) {
+            filter.cheapestPrice = { $gt: parseInt(min) || 1 }; // Convert min to number
+        }
+        if (max !== undefined) {
+            filter.cheapestPrice = { ...filter.cheapestPrice, $lt: parseInt(max) || 900 }; // Convert max to number
+        }
+        const hotels = await HotelModel.find(filter).limit(parseInt(limit));
+        res.status(200).send(hotels);
+    } catch (err) {
+        console.error(err);
+        res.status(400).send("Error in getting hotels");
+    }
+});
+
+// count by city
+hotelRoute.get("/countbycity",async(req,res,next)=>{
+    const city = req.query.cities.split(",");
+    try {
+        const list = await Promise.all(city.map((city)=>{
+            return HotelModel.countDocuments({city:city});
+        }))
+        
+        res.status(200).send(list);
+    } catch (err) {
+        next(err);
+        res.status(400).send("error in getting hotels");
+    }
+})
+
+// count by type
+hotelRoute.get("/countbytype",async(req,res,next)=>{
+    try {
+        const hotelCount = await HotelModel.countDocuments({type:"hotel"});        
+        const apartmentCount = await HotelModel.countDocuments({type:"apartment"});        
+        const resortCount = await HotelModel.countDocuments({type:"resort"});        
+        const villaCount = await HotelModel.countDocuments({type:"villa"});        
+        const cabinCount = await HotelModel.countDocuments({type:"cabin"});        
+        res.status(200).send([
+            {type:"hotel",count:hotelCount},
+            {type:"apartment",count:apartmentCount},
+            {type:"resort",count:resortCount},
+            {type:"villa",count:villaCount},
+            {type:"cabin",count:cabinCount}
+        ]);
+    } catch (err) {
+        next(err);
+        res.status(400).send("error in getting hotels");
+    }
+})
+
+// count by type
+hotelRoute.get("/countbytype",async(req,res,next)=>{
     try {
         const hotels =  await HotelModel.find();
         res.status(200).send(hotels);
     } catch (err) {
-        // next(err);
+        next(err);
         res.status(400).send("error in getting hotels");
     }
 })
+
+// get room by id
+hotelRoute.get("/room/:id",async(req,res,next)=>{
+    try {
+        const hotel = await HotelModel.findById(req.params.id);
+        const roomList = await Promise.all(hotel.rooms.map((room)=>{
+            return RoomModel.findById(room);
+        }));
+        res.status(200).json(roomList);
+    } catch (error) {
+        next(error);
+    }
+})
+
 
 // "type":"DOSA specialist",
 //   "title":"Very good hotel in city",
@@ -62,7 +129,7 @@ hotelRoute.delete("/delete/:id",verifyAdmin, async(req,res)=>{
 });
 
 // for single hotel
-hotelRoute.get("/:id",async(req,res)=>{
+hotelRoute.get("/find/:id",async(req,res)=>{
     try {
         const oneHotel = await HotelModel.findById(req.params.id);
         res.send(oneHotel);

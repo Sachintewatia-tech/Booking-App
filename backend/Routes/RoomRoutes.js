@@ -47,6 +47,15 @@ roomRoute.patch("/update/:id",verifyAdmin,async(req,res)=>{
     }
 })
 
+roomRoute.put("/availability/:id",async(req,res,next)=>{
+    try {
+        await RoomModel.updateOne({"roomNumber._id":req.params.id},{$push:{"roomNumber.$.unavailabelRoom":req.body.dates}});
+        res.status(200).send("Room status has been updated");
+    } catch (error) {
+        next(err);
+    }
+})
+
 // for deleting the room
 roomRoute.delete("/:id/:hotlid",verifyAdmin, async(req,res)=>{
     const hotelId = req.params.hotlid; 
