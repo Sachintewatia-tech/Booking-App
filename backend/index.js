@@ -8,26 +8,41 @@ const { roomRoute } = require("./Routes/RoomRoutes");
 const cookie_parser = require("cookie-parser");
 const app = express();
 require('dotenv').config();
+
+// Middlewares
 app.use(express.json());
 app.use(cookie_parser());
 app.use(cors());
 
-app.get("/",(req,res)=>{
+// Test Route
+app.get("/", (req, res) => {
     res.send("Welcome to the app");
-})
+});
 
-app.use("/auth",authRoute);
-app.use("/user",userRoute);
-app.use("/hotel",hotelRoute);
-app.use("/room",roomRoute);
+// Routes
+app.use("/auth", authRoute);
+app.use("/user", userRoute);
+app.use("/hotel", hotelRoute);
+app.use("/room", roomRoute);
 
+// Global Error-Handling Middleware
+app.use((err, req, res, next) => {
+    const status = err.status || 500;
+    const message = err.message || "Internal Server Error";
+    res.status(status).json({
+        success: false,
+        status: status,
+        message: message,
+    });
+});
 
-app.listen(process.env.port,async()=>{
+// Start the server
+app.listen(process.env.port, async () => {
     try {
-        await connection 
-        console.log('conneted to backend');
+        await connection;
+        console.log('Connected to backend');
     } catch (error) {
-        console.log('error in backend');
+        console.log('Error in backend');
     }
-    console.log(`server running on ${process.env.port} port`);
-})
+    console.log(`Server running on port ${process.env.port}`);
+});

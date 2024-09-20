@@ -8,7 +8,12 @@ const jwt = require("jsonwebtoken");
 authRoute.get("/",async(req,res)=>{
     try {
         const users = await AuthModel.find();
-        res.status(200).send(users);
+        if(!users){
+            res.status(200).send("No users found, Please create an account first")
+        }
+        else{
+            res.status(200).send(users);
+        } 
     } catch (error) {
         console.log(error);
         res.send("error in getting users")
@@ -33,28 +38,25 @@ authRoute.post("/register",async(req,res,next)=>{
     }
 });
 
-authRoute.post("/login",async(req,res,next)=>{
+authRoute.post("/login", async (req, res, next) => {
     try {
-        const findUser = await AuthModel.findOne({userName:req.body.userName});
-        // console.log(findUser._doc);
-        const {password,isAdmin,...otherDetails} = findUser._doc;
-        // console.log();
-        if(!findUser) return next(createError(401,"User not found!"));
-        
-        const findPass = await bcrypt.compare(req.body.password,findUser.password);
-        if(!findPass) return next(createError(400,"Wrong Password!"));
+        const findUser = await AuthModel.findOne({ userName: req.body.userName });
 
-        const token = jwt.sign({id: findUser._id, isAdmin:findUser.isAdmin},process.env.jwt);
-        // console.log(token);
-        // res.setHeader('Authorization', `Bearer ${token}`);
-        res.cookie("access_token",token,{httpOnly:true}).status(200).send({...otherDetails});
-        // res.status(200).send({...otherDetails});
+        if (!findUser) return next(createError(401, "User not found!"));
 
+        const findPass = await bcrypt.compare(req.body.password, findUser.password);
+        if (!findPass) return next(createError(400, "Wrong Password!"));
+
+        const { password, isAdmin, ...otherDetails } = findUser._doc;
+
+        const token = jwt.sign({ id: findUser._id, isAdmin: findUser.isAdmin }, process.env.jwt);
+        res.cookie("access_token", token, { httpOnly: true })
+            .status(200)
+            .send({ ...otherDetails });
     } catch (error) {
-        console.log(error);
-        res.status(400).send("Error in logging in!");
+        next(error);  // Pass any unexpected error to the error handler middleware
     }
-})
+});
 
 
 module.exports = {

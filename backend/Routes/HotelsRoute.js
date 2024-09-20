@@ -2,19 +2,26 @@ const express = require("express");
 const { HotelModel } = require("../models/hotelModel");
 const { createError } = require("../utils/ErrorFile");
 const { verifyUser, verifyAdmin } = require("../utils/verifyToken");
+const { RoomModel } = require("../models/roomModel");
 const hotelRoute = express.Router();
 
-// for getting
-hotelRoute.get("/",async(req,res,next)=>{
+hotelRoute.get("/", async (req, res, next) => {
     try {
-        const hotels =  await HotelModel.find();
+        const { limit, max, min, ...others } = req.query;
+        const filter = { ...others };
+        if (min !== undefined) {
+            filter.cheapestPrice = { $gt: parseInt(min) || 1 }; // Convert min to number
+        }
+        if (max !== undefined) {
+            filter.cheapestPrice = { ...filter.cheapestPrice, $lt: parseInt(max) || 900 }; // Convert max to number
+        }
+        const hotels = await HotelModel.find(filter).limit(parseInt(limit));
         res.status(200).send(hotels);
     } catch (err) {
-        next(err);
-        res.status(400).send("error in getting hotels");
+        console.error(err);
+        res.status(400).send("Error in getting hotels");
     }
-})
-
+});
 
 // count by city
 hotelRoute.get("/countbycity",async(req,res,next)=>{
@@ -62,6 +69,20 @@ hotelRoute.get("/countbytype",async(req,res,next)=>{
         res.status(400).send("error in getting hotels");
     }
 })
+
+// get room by id
+hotelRoute.get("/room/:id",async(req,res,next)=>{
+    try {
+        const hotel = await HotelModel.findById(req.params.id);
+        const roomList = await Promise.all(hotel.rooms.map((room)=>{
+            return RoomModel.findById(room);
+        }));
+        res.status(200).json(roomList);
+    } catch (error) {
+        next(error);
+    }
+})
+
 
 // "type":"DOSA specialist",
 //   "title":"Very good hotel in city",
