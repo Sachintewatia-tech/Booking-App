@@ -11,7 +11,8 @@ const SearchItem = ({item}) => {
       />
       <div className="siDesc">
         <h1 className="siTitle">{item.title}</h1>
-        <span className="siDistance">{item.distance}</span>
+        <h3 className="siName">{item.name}</h3>
+        <span className="siDistance">Distance: {item.distance}</span>
         <span className="siTaxiOp">Free airport taxi</span>
         <span className="siSubtitle">
           Studio Apartment with Air conditioning

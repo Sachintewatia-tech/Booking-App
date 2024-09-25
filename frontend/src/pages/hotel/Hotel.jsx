@@ -30,7 +30,7 @@ const Hotel = () => {
     if(user){
       setOpenModal(true);
     }else{
-      navigate('/login');
+      navigate('/register');
     }
   }
   function daysDifference(date1,date2){
@@ -115,14 +115,16 @@ const Hotel = () => {
           </div>
         )}
         <div className="hotelWrapper">
-          <button className="bookNow">Reserve or Book Now!</button>
+          <button className="bookNow" onClick={handleClick}>Reserve or Book Now!</button>
+          <h1 className="hotelName">{data.name}</h1>
           <h1 className="hotelTitle">{data.title}</h1>
+
           <div className="hotelAddress">
             <FontAwesomeIcon icon={faLocationDot} />
             <span>{data.address}</span>
           </div>
           <span className="hotelDistance">
-            {data.distance}
+           distance: {data.distance}
           </span>
           <span className="hotelPriceHighlight">
             Book a stay over ${data.cheapestPrice} at this property and get a free airport taxi

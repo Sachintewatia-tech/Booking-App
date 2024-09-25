@@ -24,19 +24,23 @@ hotelRoute.get("/", async (req, res, next) => {
 });
 
 // count by city
-hotelRoute.get("/countbycity",async(req,res,next)=>{
-    const city = req.query.cities.split(",");
+hotelRoute.get("/countbycity", async (req, res, next) => {
+    const cities = req.query.cities.split(",");
+
     try {
-        const list = await Promise.all(city.map((city)=>{
-            return HotelModel.countDocuments({city:city});
-        }))
-        
+        const list = await Promise.all(cities.map((city) => {
+            return HotelModel.countDocuments({ 
+                city: { $regex: new RegExp(`^${city.trim()}$`, 'i') } // Case-insensitive match
+            });
+        }));
+
         res.status(200).send(list);
     } catch (err) {
         next(err);
-        res.status(400).send("error in getting hotels");
+        res.status(400).send("Error in getting hotels");
     }
-})
+});
+
 
 // count by type
 hotelRoute.get("/countbytype",async(req,res,next)=>{

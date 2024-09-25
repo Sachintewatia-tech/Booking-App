@@ -21,16 +21,23 @@ authRoute.get("/",async(req,res)=>{
 })
 
 authRoute.post("/register",async(req,res,next)=>{
+    const {email,userName,password} = req.body;
     const salt = bcrypt.genSaltSync(10);
-    const hash = bcrypt.hashSync(req.body.password,salt);
+    const hash = bcrypt.hashSync(password,salt);
     try {
+        const isUser = await AuthModel.findOne({email});
+        if(isUser){
+            return res.status(400).json({
+                message:"User already present with this email",
+            })
+        }
         const newUser = new AuthModel({
-            userName:req.body.userName,
-            email:req.body.email,
+            userName:userName,
+            email:email,
             password:hash
         })
         await newUser.save();
-        res.status(200).send("User has been created");
+        res.status(200).json({message:"User has been created"});
     } catch (error) {
         console.log(error);   
         next(error);     
