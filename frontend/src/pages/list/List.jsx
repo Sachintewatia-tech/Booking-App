@@ -90,20 +90,19 @@ const List = () => {
             <button>Search</button>
           </div>
           <div className="listResult">
-            {loading?<h1>Loading...</h1>:<>
-            {
-
-              data.map((ele)=>{
-                return(
-
-                  <SearchItem key={ele._id} item={ele} />
-                  )
-                
-              })
-              }
-            
-            </>
-            }
+          {loading ? (
+              <h1>Loading...</h1>
+            ) : (
+              <>
+                {data && data.length > 0 ? (
+                  data.map((ele) => (
+                    <SearchItem key={ele._id} item={ele} />
+                  ))
+                ) : (
+                  <h2>Search appropriate city</h2>
+                )}
+              </>
+            )}
           </div>
         </div>
       </div>

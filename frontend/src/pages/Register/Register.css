@@ -1,4 +1,4 @@
-.login-form-container {
+.register-form-container {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -7,7 +7,7 @@
 }
 
 /* Styling the form */
-.login-form {
+.register-form {
     background-color: #fff;
     padding: 30px;
     border-radius: 8px;
@@ -16,7 +16,7 @@
     text-align: center;
 }
 
-.login-form h2 {
+.register-form h2 {
     margin-bottom: 20px;
     color: #333;
 }
@@ -62,3 +62,26 @@
 .lbutton:hover {
     background-color: #0056b3;
 }
+
+.error-message {
+    color: red;
+    font-size: 14px;
+    margin-top: 10px;
+    display: block;
+  }
+  
+  .login-link {
+    color: #007bff; /* Blue link color */
+    font-weight: bold;
+    font-size: 14px;
+    text-decoration: none;
+    margin-top: 5px;
+    display: inline-block; /* Ensure it doesn't break the flow */
+    transition: color 0.3s ease; /* Smooth hover transition */
+  }
+  
+  .login-link:hover {
+    color: #0056b3; /* Darker blue on hover */
+    text-decoration: underline; /* Underline on hover */
+  }
+  
