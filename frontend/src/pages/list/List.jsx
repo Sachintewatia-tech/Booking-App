@@ -15,7 +15,7 @@ const List = () => {
   const [dates, setDates] = useState(location.state.dates);
   const [openDate, setOpenDate] = useState(false);
   const [options, setOptions] = useState(location.state.options);
-  const {data,loading,error} = useFetch(`http://localhost:4500/hotel?city=${destination}`);
+  const {data,loading,error} = useFetch(`https://booking-app-backend-tdb8.onrender.com/hotel?city=${destination}`);
   
   return (
     <div>

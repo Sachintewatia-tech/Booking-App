@@ -3,7 +3,7 @@ import "./featured.css";
 
 const Featured = () => {
 
-  const {data,loading,error} = useFetch("http://localhost:4500/hotel/countbycity?cities=Palwal,Fbd,Delhi")
+  const {data,loading,error} = useFetch("https://booking-app-backend-tdb8.onrender.com/hotel/countbycity?cities=Palwal,Fbd,Delhi")
   return loading? <h1>Loading...</h1>: (
     <div className="featured">
       <div className="featuredItem">

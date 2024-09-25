@@ -21,7 +21,7 @@ const Register = () => {
     const handleClick = async e => {
         e.preventDefault();
         try {
-            const res = await axios.post(`http://localhost:4500/auth/register`, credentials);
+            const res = await axios.post(`https://booking-app-backend-tdb8.onrender.com/auth/register`, credentials);
             alert('User Registered successfully')
             navigate('/login');
         } catch (err) {            

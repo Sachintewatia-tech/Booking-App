@@ -2,7 +2,7 @@ import useFetch from "../../hooks/useFetch";
 import "./featuredProperties.css";
 
 const FeaturedProperties = () => {
-  const {data,loading,error} = useFetch("http://localhost:4500/hotel?limit=4")
+  const {data,loading,error} = useFetch("https://booking-app-backend-tdb8.onrender.com/hotel?limit=4")
   return (
     <div className="fp">
       { 

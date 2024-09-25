@@ -22,7 +22,7 @@ const Hotel = () => {
   const [openModal, setOpenModal] = useState(false);
   const location = useLocation();
   let path = location.pathname.split('/')[2];
-  const {data,loading,error} = useFetch(`http://localhost:4500/hotel/find/${path}`);
+  const {data,loading,error} = useFetch(`https://booking-app-backend-tdb8.onrender.com/hotel/find/${path}`);
   const { dates,options } = useContext(SearchContext);
   const {user} = useContext(AuthContext);
   const navigate = useNavigate();

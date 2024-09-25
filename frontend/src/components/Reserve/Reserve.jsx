@@ -12,7 +12,7 @@ const Reserve = ({ setOpen, hotelId }) => {
   const [showThankYou, setShowThankYou] = useState(false); // State for thank you modal
   const { dates } = useContext(SearchContext);
   const navigate = useNavigate();
-  const { data, loading, error } = useFetch(`http://localhost:4500/hotel/room/${hotelId}`);
+  const { data, loading, error } = useFetch(`https://booking-app-backend-tdb8.onrender.com/hotel/room/${hotelId}`);
 
   const handleChange = (e) => {
     const checked = e.target.checked;
@@ -50,7 +50,7 @@ const Reserve = ({ setOpen, hotelId }) => {
     try {
       await Promise.all(
         selectedRoom.map((roomId) => {
-          const res = axios.put(`http://localhost:4500/room/availability/${roomId}`, {
+          const res = axios.put(`https://booking-app-backend-tdb8.onrender.com/room/availability/${roomId}`, {
             dates: allDates,
           });
           return res.data;
